@@ -27,7 +27,10 @@ contract PetParkTest is Test, PetPark {
 
     function testCannotAddAnimalWhenNonOwner() public {
         // 1. Complete this test and remove the assert line below
-        assert(false);
+        vm.startPrank(testPrimaryAccount);
+        vm.expectRevert("Only owner can add animals");
+        petPark.add(AnimalType.Fish, 5);
+        vm.stopPrank();
     }
 
     function testCannotAddInvalidAnimal() public {
@@ -44,7 +47,8 @@ contract PetParkTest is Test, PetPark {
 
     function testCannotBorrowWhenAgeZero() public {
         // 2. Complete this test and remove the assert line below
-        assert(false);
+        vm.expectRevert("Age must be greater than zero");
+        petPark.borrow(0, Gender.Male, AnimalType.Fish);
     }
 
     function testCannotBorrowUnavailableAnimal() public {
@@ -128,7 +132,10 @@ contract PetParkTest is Test, PetPark {
 
     function testBorrowCountDecrement() public {
         // 3. Complete this test and remove the assert line below
-        assert(false);
+        petPark.add(AnimalType.Fish, 5);
+        assertEq(petPark.animalCounts(AnimalType.Fish), 5);
+        petPark.borrow(30, Gender.Male, AnimalType.Fish);
+        assertEq(petPark.animalCounts(AnimalType.Fish), 4);
     }
 
     function testCannotGiveBack() public {
